@@ -51,13 +51,17 @@ poly_data <- poly_data1 |>
 
 # Drawing initial maps
 
+# block for previewing
+block_filter <- 6.1
+
 segments |> 
-  filter(block == 4) |>
+  filter(block == block_filter) |>
   ggplot() +
   geom_polygon(aes(x = x, y = y, fill = fill, group = group),
-               color = "black",
-               linewidth = 0.5,
-               data = poly_data) +
+               color = NA,
+               linewidth = 0,
+               data = poly_data |>
+                 filter(block == block_filter)) +
   geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2, linetype = linetype)) +
   scale_linetype_identity() +
   theme_void()
