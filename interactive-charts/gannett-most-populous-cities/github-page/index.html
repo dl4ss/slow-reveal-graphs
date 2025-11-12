@@ -3,18 +3,18 @@
 
 <head>
     <!-- <link rel="stylesheet" href="/D3 Files/stylesheet_v1.css?v=" + new Date().getTime();> -->
+
+    <!-- Load libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 
 <script>
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.type = "text/css";
-    link.href = "/D3 Files/stylesheet_v1.css?v=" + new Date().getTime(); // cache-busting
+    link.href = "/interactive-charts/gannett-most-populous-cities/github-page/D3 Files/stylesheet_v1.css?v=" + new Date().getTime(); // cache-busting
     document.head.appendChild(link);
 </script>
-
-<!-- Load libraries -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 <!-- Create a div where the graph will take place -->
 <div id="dataplot"></div>
@@ -57,7 +57,7 @@
                 "translate(" + margin.left + "," + margin.top + ")");
 
         // Defining file path
-        var plotting_data = "/D3 Files/processed_data_v1.csv?v=" + new Date().getTime();
+        var plotting_data = "/interactive-charts/gannett-most-populous-cities/github-page/D3 Files/stylesheet_v1.css?v=" + new Date().getTime();
 
         //Read the data
         d3.csv(plotting_data).then(function (data) {
@@ -207,7 +207,7 @@
                 .data(widerData)
                 .enter()
                 .append("image")
-                .attr("href", d => "/city-emblems/" + d.raster_name + ".png")
+                .attr("href", d => "/interactive-charts/gannett-most-populous-cities/github-page/city-emblems/" + d.raster_name + ".png")
                 .attr("x", d => x(d.Census * -1) - (emblemDimensions.width / 2))
                 .attr("y", d => y(d.Rank * -1) - (emblemDimensions.height / 2))
                 .attr("width", emblemDimensions.width)
@@ -220,7 +220,7 @@
                 .append("image")
                 .attr("id", "emblemTooltips")
                 .attr("class", function (d) {return "mask " + d.raster_name})
-                .attr("href", d => "/city-emblems/mask.png")
+                .attr("href", d => "/interactive-charts/gannett-most-populous-cities/github-page/city-emblems/mask.png")
                 .attr("x", d => x(d.Census * -1) - (emblemDimensions.width / 2))
                 .attr("y", d => y(d.Rank * -1) - (emblemDimensions.height / 2))
                 .attr("width", emblemDimensions.width)
