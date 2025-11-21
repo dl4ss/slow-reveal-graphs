@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+</head>
+
+<body>
+
+    <p>
+        Thank for you visiting this page. It is still under construction. 
+        See the table below for an index of interactive visualizations.
+    </p>
+
+    <script>
+    const interactions = [
+            {title: "Most Populous Cities - 11th Census", path: "https://louis-cousino.github.io/dl4ss_charts.github.io/interactive_charts/most_populous_cities_11th_census/index.html"},
+            {title: "Most Populous Cities - 12th Census", path: "https://louis-cousino.github.io/dl4ss_charts.github.io/interactive_charts/most_populous_cities_12th_census/index.html"},
+            {title: "Most Populous States - 11th Census", path: "https://louis-cousino.github.io/dl4ss_charts.github.io/interactive_charts/most_populous_states_11th_census/index.html"},
+            {title: "Most Populous States - 12th Census", path: "https://louis-cousino.github.io/dl4ss_charts.github.io/interactive_charts/most_populous_states_12th_census/index.html"}
+        ];
+
+        const headers = ["Title", "Path"];
+
+        const table = document.createElement('table');
+        table.border = "1";
+
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        interactions.forEach(item => {
+            const row = document.createElement('tr');
+            headers.forEach(key => {
+                const cell = document.createElement('td');
+                const value = item[key.toLowerCase()];
+
+                if (key === "Path") {
+                    const link = document.createElement('a');
+                    link.href = value;
+                    link.textContent = value;
+                    link.target = "_blank";
+                    cell.appendChild(link);
+                } else {
+                    cell.textContent = value;
+                }
+
+                row.appendChild(cell);
+
+            });
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+
+        document.body.appendChild(table); // Append to the DOM
+
+    </script>
+
+
+
+
+</body>
