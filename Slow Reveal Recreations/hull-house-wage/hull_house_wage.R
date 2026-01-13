@@ -15,6 +15,10 @@
 #   Robert Bilyk (main code)
 # Ian Curtis (2023, code to save plots)
 
+library(tidyverse)
+library(showtext)
+library(magick)
+
 
 font_add_google(name = "Space Mono", family = "Text")
 font_add_google(name = "Cutive Mono", family = "Main")
@@ -51,7 +55,7 @@ segments(x0=90, x1=275, y0=130, y1=130, lwd = 1, lty = "solid")
 
 text(98.4, 90, "6", family = "Main", cex = .75, col = "black", srt = 270)
 segments(x0=106.8, x1=106.8, y0=50, y1=130, lwd = 1, lty = "solid")
-text(115.2, 90, "5", family = "Main", cex = .75, col = "black", srt = 270)
+#text(115.2, 90, "5", family = "Main", cex = .75, col = "black", srt = 270)
 segments(x0=123.6, x1=123.6, y0=50, y1=130, lwd = 1, lty = "solid")
 text(132, 90, "4", family = "Main", cex = .75, col = "black", srt = 270)
 segments(x0=140.4, x1=140.4, y0=50, y1=130, lwd = 1, lty = "solid")
@@ -2868,7 +2872,8 @@ segments(x0=1280, x1=1280, y0=2, y1=12, lwd = 1, lty = "solid")
 segments(x0=1130, x1=1280, y0=12, y1=12, lwd = 1, lty = "solid")
 
 text(1390, 435, "(NORTH)", family = "Text", cex = .75, col = "black", srt = 270)
-text(1355, 435, "WAGE MAP NO.1 - POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
+# text(1355, 435, "WAGE MAP NO.1 - POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
+text(1355, 435, "                POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
 text(1335, 435, "HALSTED STREET TO JEFFERSON, CHICAGO.", family = "Text", cex = 1, col = "black", srt = 270)
 text(700, 955, "THESE FIGURES REPRESENT THE TOTAL EARNINGS PER WEEK OF A FAMILY.", family = "Text", cex = 1, col = "black")
 
@@ -3163,7 +3168,7 @@ text(920, 775, "139", family = "Main", cex = .75, col = "black")
 text(894, 805, "136", family = "Main", cex = .75, col = "black")
 text(920, 805, "135", family = "Main", cex = .75, col = "black")
 text(905, 830, "ST.", family = "Text", cex = 1.5, col = "black", srt = 270)
-
+ 
 text(1107, 83, "EWING", family = "Text", cex = 1.5, col = "black", srt = 270)
 text(1099, 130, "206", family = "Main", cex = .75, col = "black")
 text(1099, 142, "204", family = "Main", cex = .75, col = "black")
@@ -3226,7 +3231,7 @@ text(1195, 620, "356", family = "Main", cex = .75, col = "black", srt = 270)
 text(1210, 610, "355", family = "Main", cex = .75, col = "black", srt = 270)
 text(1225, 620, "352", family = "Main", cex = .75, col = "black", srt = 270)
 
-#Bottom Key
+# #Bottom Key
 
 polygon(c(235, 270, 270, 235), c(885, 885, 915, 915), border = "black", col = "black")
 text(252, 925, expression("$5"^"00"*"AND LESS"), family = "Text", cex = .75, col = "black")
@@ -3254,7 +3259,7 @@ segments(x0=1135, x1=1290, y0=885, y1=885, lwd = 1, lty = "solid")
 
 dev.off()
 
-image_write(fig01, path = here::here("hull-house-wage", "01_full_unmasked.png"), format = "png")
+image_write(fig01, path = here::here("Slow Reveal Recreations", "hull-house-wage", "recreated-imgs", "07_legend_with_description.png"), format = "png")
 
 
 

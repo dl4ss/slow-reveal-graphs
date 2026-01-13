@@ -2381,7 +2381,8 @@ segments(x0=1280, x1=1280, y0=2, y1=12, lwd = 1, lty = "solid")
 segments(x0=1130, x1=1280, y0=12, y1=12, lwd = 1, lty = "solid")
 
 text(1390, 435, "(NORTH)", family = "Text", cex = .75, col = "black", srt = 270)
-text(1355, 435, "WAGE MAP NO.1 - POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
+text(1355, 435, "NATIONALITIES MAP NO.1 - POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
+# text(1355, 435, "                         POLK STREET TO TWELFTH.", family = "Text", cex = 1, col = "black", srt = 270)
 text(1335, 435, "HALSTED STREET TO JEFFERSON, CHICAGO.", family = "Text", cex = 1, col = "black", srt = 270)
 text(700, 955, "LOTS UNCOLORED ARE OCCUPIED BY FACTORIES, STORES, ETC., NOT BY DWELLINGS.", family = "Text", cex = 1, col = "black")
 
@@ -2824,8 +2825,7 @@ segments(x0=730, x1=1290, y0=885, y1=885, lwd = 1, lty = "solid")
 
 dev.off()
 
-image_write(fig01, path = here::here("hull-house-map1", "01_full_unmasked.png"), format = "png")
-
+image_write(fig01, path = here::here("Slow Reveal Recreations", "hull-house-map1", "recreated-imgs", "05_with_ethnicities.png"), format = "png")
 
 
 
