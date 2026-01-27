@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <!-- Load libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+
+<body>
+
+    <main>
+
+        <section id="background">
+
+        </section>
+        <section id="scrolly">
+
+            <figure>
+                <p id="textScroll"></p>
+            </figure>
+
+            <article>
+                <div class="step" data-step="1">
+                    <p>Ptolemy`s World Map<br>A Virtual Tour</p>
+                </div>
+                <div class="step" data-step="2">
+                    <p>This is a story about Claudius Ptolemy and his world map, which played a significant role in both
+                        U.S. and World history. As you scroll, the story will progress on the left side of your screen.
+                        On the right side, you`ll see images that correspond with the story. Pay attention to the
+                        outlines that appear on the map. When you need more time to read or look at something, simply
+                        stop scrolling. Sometimes you`ll be invited to click on a hyperlink, which will open a new
+                        window on your computer. We hope you`ll enjoy our scrollytelling about Ptolemy`s world map!
+                    </p>
+                </div>
+                <div class="step" data-step="3">
+                    <p>Thanksgiving</p>
+                </div>
+                <div class="step" data-step="4">
+                    <p>Google's 27th Anniversary</p>
+                </div>
+            </article>
+
+            <figure>
+                <img id="imageScroll">
+            </figure>
+        </section>
+
+        <section id="outro"></section>
+    </main>
+
+    <!-- Create a div where the graph will take place -->
+    <div id="dataplot"></div>
+
+    <script>
+        // using d3 for convenience
+        var main = d3.select("main");
+        var scrolly = main.select("#scrolly");
+        var figure = scrolly.select("figure");
+        var article = scrolly.select("article");
+        var step = article.selectAll(".step");
+
+        // initialize the scrollama
+        var scroller = scrollama();
+
+        // generic window resize listener event
+        function handleResize() {
+            // 1. update height of step elements
+            var stepH = Math.floor(window.innerHeight * 0.75);
+
+            // var stepH = 500;
+            step.style("height", stepH + "px");
+
+            var figureHeight = window.innerHeight / 2;
+            var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+
+            figure
+                .style("height", figureHeight + "px")
+                .style("top", figureMarginTop + "px");
+
+            // 3. tell scrollama to update new element dimensions
+            scroller.resize();
+        }
+
+        // scrollama event handlers
+        function handleStepEnter(response) {
+            console.log(response);
+            // response = { element, direction, index }
+
+            // add color to current step only
+            step.classed("is-active", function (d, i) {
+                return i === response.index;
+            });
+
+            const images = [
+                "https://www.google.com/logos/doodles/2026/dr-martin-luther-king-jr-day-2026-6753651837110996-2x.png",
+                "https://www.google.com/logos/doodles/2025/mothers-day-2025-dec-22-6753651837110688-2x.png",
+                "https://www.google.com/logos/doodles/2025/thanksgiving-2025-6753651837111179.2-2x.png",
+                "https://www.google.com/logos/doodles/2025/googles-27th-birthday-6753651837110886.2-2x.png"
+            ];
+        }
+
+        function handleStepProgress(response) {
+            console.log(response);
+            var el = d3.select(response.element);
+
+            // Defining the current element;
+            var currentElement = document.querySelector("[data-step ='" + `${response.index + 1}` + "']");
+
+            let opacity;
+
+            if (response.progress <= 0.33) {
+
+                // Removing the active class tag
+                currentElement.classList.remove("is-active");
+
+                step.classed("is-fading-in", function (d, i) {
+                    return i === response.index;
+                });
+
+                // Fade in: from 0 to 1 over the first 25%
+                opacity = (response.progress) * 3;
+
+            } else if (response.progress > 0.33 & response.progress < 0.66) {
+
+                currentElement.classList.remove("is-fading-in");
+                currentElement.classList.remove("is-fading-out");
+
+                step.classed("is-active", function (d, i) {
+                    return i === response.index;
+                });
+
+                // Stay at opacity 1 between 25% and 75%
+                opacity = 1;
+            } else {
+
+                // Removing the active class tag
+                currentElement.classList.remove("is-active");
+
+                step.classed("is-fading-out", function (d, i) {
+                    return i === response.index;
+                });
+
+
+                // Fade out: from 1 to 0 over the last 25%
+                opacity = 3 - response.progress * 3;
+                // opacity=1;
+            }
+
+            el.style("opacity", opacity);
+        }
+
+        function init() {
+
+            // 1. force a resize on load to ensure proper dimensions are sent to scrollama
+            handleResize();
+
+            // 2. setup the scroller passing options
+            // 		this will also initialize trigger observations
+            // 3. bind scrollama event handlers (this can be chained like below)
+            scroller
+                .setup({
+                    step: "#scrolly article .step",
+                    // offset: 0.33,
+                    progress: true,
+                    debug: false
+                })
+                // .onStepEnter(handleStepEnter);
+                .onStepProgress(handleStepProgress);
+        }
+
+        // kick things off
+        init();
+    </script>
+
+</body>
