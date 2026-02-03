@@ -39,15 +39,27 @@ figure p {
     
 }
 
-.step {
-    margin: 0 auto 2rem auto;
+.spacer {
+    margin: 0;
     color: #ffffff;
     background-color: rgba(95, 68, 68, 0);
     opacity: 0;
     /* Centering <p> within <div> */
-    display: flex;
+/*     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    outline: 10px solid red;
+}
+
+.step {
+    margin: 0;
+    color: #ffffff;
+    background-color: rgba(95, 68, 68, 0);
+    opacity: 1;
+    /* Centering <p> within <div> */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
     outline: 10px solid red;
 }
 
@@ -61,8 +73,10 @@ figure p {
     /* background-color: goldenrod;
     color: #3b3b3b; */
     position: sticky;
+    place-items: center;
     top: 50%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
+    margin: 0;
 }
 
 .step.is-active p {
@@ -70,7 +84,8 @@ figure p {
     color: #3b3b3b;
     position: sticky;
     top: 50%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
+    margin: 0;
 }
 
 .step.is-fading-out p {
@@ -78,7 +93,8 @@ figure p {
     color: #3b3b3b; */
     position: sticky;
     top: 50%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
+    margin: 0;
 }
 
 .step p {
