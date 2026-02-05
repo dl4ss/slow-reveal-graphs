@@ -19,7 +19,16 @@
         <section id="scrolly">
 
             <figure>
-                <p id="textScroll"></p>
+                <p id="textScroll" center-step="1">Ptolemy`s World Map<br>A Virtual Tour</p>
+
+                <p center-step="2">This is a story about Claudius Ptolemy and his world map, which played a significant role in both
+                    U.S. and World history. As you scroll, the story will progress on the left side of your screen.
+                    On the right side, you`ll see images that correspond with the story. Pay attention to the
+                    outlines that appear on the map. When you need more time to read or look at something, simply
+                    stop scrolling. Sometimes you`ll be invited to click on a hyperlink, which will open a new
+                    window on your computer. We hope you`ll enjoy our scrollytelling about Ptolemy`s world map!
+                </p>
+
             </figure>
 
             <article>
@@ -28,18 +37,18 @@
                 <div class="spacer"></div>
 
                 <div class="step" data-step="1">
-                    <p>Ptolemy`s World Map<br>A Virtual Tour</p>
+                    <!-- <p>Ptolemy`s World Map<br>A Virtual Tour</p> -->
                 </div>
                 <div class="spacer"></div>
 
                 <div class="step" data-step="2">
-                    <p>This is a story about Claudius Ptolemy and his world map, which played a significant role in both
+                    <!-- <p>This is a story about Claudius Ptolemy and his world map, which played a significant role in both
                         U.S. and World history. As you scroll, the story will progress on the left side of your screen.
                         On the right side, you`ll see images that correspond with the story. Pay attention to the
                         outlines that appear on the map. When you need more time to read or look at something, simply
                         stop scrolling. Sometimes you`ll be invited to click on a hyperlink, which will open a new
                         window on your computer. We hope you`ll enjoy our scrollytelling about Ptolemy`s world map!
-                    </p>
+                    </p> -->
                 </div>
                 <div class="spacer"></div>
 
@@ -94,7 +103,7 @@
 
             spacer.style("height", "500px");
 
-            var figureHeight = window.innerHeight / 2;
+            var figureHeight = window.innerHeight / 1.5;
             var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 
             figure
@@ -103,13 +112,17 @@
 
 
             // 3. tell scrollama to update new element dimensions
-            scroller.resize();
+            // scroller.resize();
         }
 
         // scrollama event handlers
         function handleStepEnter(response) {
-            console.log(response);
-            // response = { element, direction, index }
+
+            // var centerElement = document.querySelector("[center-step ='" + `${response.index}` + "']");
+
+            currentElement = d3.select("[center-step ='" + `${response.index}` + "']");
+
+            currentElement.classed("is-current", true);
 
             // add color to current step only
             step.classed("is-active", function (d, i) {
@@ -125,6 +138,9 @@
             console.log(response);
             // response = { element, direction, index }
 
+            d3.select("[center-step ='" + `${response.index}` + "']").classed("is-current", false);
+
+
             // add color to current step only
             step.classed("is-fading-out", function (d, i) {
                 return i === response.index;
@@ -137,59 +153,43 @@
 
         function handleStepProgress(response) {
             console.log(response);
-            var el = d3.select(response.element);
-
-            // Defining the current element;
-            var currentElement = document.querySelector("[data-step ='" + `${response.index}` + "']");
 
             let opacity;
 
+            // Defining the current element;
+            currentElement = d3.select("[center-step ='" + `${response.index}` + "']");
+
+            currentElement.classed("is-current", true);
+
             if (response.progress <= 0.33) {
 
-                // Removing the active class tag
-                currentElement.classList.remove("is-active");
+                // Fade in: from 0 to 1 over the first 33%
+                opacity = (response.progress) * 3;
 
-                step.classed("is-fading-in", function (d, i) {
-                    return i === response.index;
-                });
-
-                // Fade in: from 0 to 1 over the first 25%
-                // opacity = (response.progress) * 3;
-                opacity = 1;
+                // opacity = 1;
 
             } else if (response.progress > 0.33 & response.progress < 0.66) {
 
-                currentElement.classList.remove("is-fading-in");
-                currentElement.classList.remove("is-fading-out");
-
-                step.classed("is-active", function (d, i) {
-                    return i === response.index;
-                });
-
-                // Stay at opacity 1 between 25% and 75%
+                // Stay at opacity 1 between 33% and 66%
                 opacity = 1;
+
             } else {
 
-                // Removing the active class tag
-                currentElement.classList.remove("is-active");
-
-                step.classed("is-fading-out", function (d, i) {
-                    return i === response.index;
-                });
-
-
-                // Fade out: from 1 to 0 over the last 25%
-                // opacity = 3 - response.progress * 3;
-                opacity = 1;
+                // Fade out: from 1 to 0 over the last 33%
+                opacity = 3 - response.progress * 3;
+                // opacity = 1;
+                
             }
 
-            el.style("opacity", opacity);
+            currentElement.style("opacity", opacity);
         }
 
         function init() {
 
             // 1. force a resize on load to ensure proper dimensions are sent to scrollama
             handleResize();
+
+            // window.addEventListener("resize", handleResize);
 
             // 2. setup the scroller passing options
             // 		this will also initialize trigger observations
@@ -199,11 +199,11 @@
                     step: "#scrolly article .step",
                     offset: 0.5,
                     progress: true,
-                    debug: true
+                    debug: false
                 })
-                .onStepEnter(handleStepEnter)
-                .onStepExit(handleStepExit);
-            // .onStepProgress(handleStepProgress);
+                // .onStepEnter(handleStepEnter)
+                // .onStepExit(handleStepExit);
+            .onStepProgress(handleStepProgress);
         }
 
         // kick things off

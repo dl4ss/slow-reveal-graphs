@@ -1,7 +1,9 @@
 #scrolly {
-    position: absolute;
+    position: relative;
     background-color: #ffffff;
     padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 article {
@@ -14,7 +16,7 @@ article {
 figure {
     position: -webkit-sticky;
     position: sticky;
-    left: 0;
+    left: 1rem;
     width: 100%;
     margin: 0;
     -webkit-transform: translate3d(0, 0, 0);
@@ -28,15 +30,32 @@ figure p {
     text-align: center;
     padding: 1rem;
     position: absolute;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    /* font-size: 2rem; */
+    /* font-weight: 900; */
+    color: #000000;
+
+}
+
+figure p.is-current {
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    /* opacity: 1; */
     top: 50%;
     left: 50%;
     -moz-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     font-size: 2rem;
-    font-weight: 900;
+    /* font-weight: 900; */
     color: #000000;
-    
+
 }
 
 .spacer {
@@ -45,7 +64,7 @@ figure p {
     background-color: rgba(95, 68, 68, 0);
     opacity: 0;
     /* Centering <p> within <div> */
-/*     display: flex;
+    /*     display: flex;
     justify-content: center;
     align-items: center; */
     outline: 10px solid red;
@@ -64,7 +83,7 @@ figure p {
 }
 
 .step:last-child {
-    margin-bottom: 5rem; 
+    margin-bottom: 5rem;
     /* I'm sure there's a way to programatically center the last child, but this works for now.*/
     opacity: 1;
 }
