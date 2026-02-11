@@ -73,6 +73,6 @@ pto_table_filtered |>
         plot.margin = margin(15,15,10,10))
 
 # Saving plot
-ggsave(here::here("Slow Reveal Recreations", "patents-growth", "recreated-imgs", "patents_1790_1860.png"), width = 1934/150, height = 1470/150,
+ggsave(here::here("Slow Reveal Recreations", "patents-growth", "recreated-imgs", "01_full_unmasked.png"), width = 1934/150, height = 1470/150,
        units = "in")
   

@@ -158,7 +158,7 @@ data_literacy_upload <- function(folder_name_list) {
     
     # Updating data
     
-    range_write(sheet_id, data = data.frame(Folder_Lnk = gs4_formula(folder_link), Priotity = sheet_data[row_num-1, 15], Status = "Recreation Complete"), range = str_c("M",row_num,":","O",row_num),
+    range_write(sheet_id, data = data.frame(Folder_Lnk = gs4_formula(folder_link), Priotity = sheet_data[row_num-1, 16], Status = "Recreation Complete"), range = str_c("M",row_num,":","O",row_num),
                 col_names = FALSE)
     
     range_write(sheet_id, data = data.frame(Thumbnail = gs4_formula(str_c("=IMAGE(\"https://drive.google.com/uc?id=", file_id[length(file_id)], "\")"))), range = str_c("D", row_num),
