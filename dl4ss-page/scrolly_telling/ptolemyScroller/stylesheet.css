@@ -13,6 +13,11 @@ article {
     /* margin: 0 auto; */
 }
 
+section {
+    pointer-events: none;
+    background: none;
+}
+
 figure {
     position: sticky;
     display: flex;
@@ -22,7 +27,6 @@ figure {
     width: 100%;
     margin: 0;
     background-color: #8a8a8a;
-    z-index: 0;
 
 }
 
@@ -33,15 +37,22 @@ figure p {
     opacity: 0;
     font-size: 2rem;
     color: #000000;
+    pointer-events: none;
+    z-index: 999;
 
 }
 
 figure img {
     opacity: 0;
+    width: 800px;
+    object-fit: scale-down;
+
 }
 
 figure p.is-current {
     opacity: 1;
+    pointer-events: auto;
+    z-index: 999;
 }
 
 .step-content {
@@ -52,17 +63,17 @@ figure p.is-current {
 .left-location,
 .right-location {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 .left-location {
     left: 0%;
-    width: 800px;
+    width: 500px;
 }
 
 .right-location {
-    right: 10%;
+    right: 5%;
+    width: 400px;
+    object-fit: scale-down;
 }
 
 /* figure img.is-current {
@@ -74,10 +85,6 @@ figure p.is-current {
     color: #ffffff;
     background-color: rgba(95, 68, 68, 0);
     opacity: 0;
-    /* Centering <p> within <div> */
-    /*     display: flex;
-    justify-content: center;
-    align-items: center; */
     outline: 10px solid red;
 }
 
@@ -91,6 +98,7 @@ figure p.is-current {
     justify-content: center;
     align-items: center; */
     outline: 10px solid red;
+    z-index: 0;
 }
 
 .step:last-child {
