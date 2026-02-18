@@ -107,13 +107,32 @@
                 <p id="contentScroll" center-step="9">
                     The map highlighted in this story was created in the 15th century from the information Ptolemy
                     provided. Like all maps, it tells its own story-what people knew and did not know about the world at
-                    the time the map was made. Before we continue take some time to study the map. What do you notice?
-                    What looks familiar and accurate? What looks unfamiliar or inaccurate? What do you wonder? When
+                    the time the map was made. <br><br> Before we continue take some time to study the map. What do you
+                    notice?
+                    What looks familiar and accurate? What looks unfamiliar or inaccurate? What do you wonder? <br><br>
+                    When
                     you're ready, keep scrolling to learn more.
                 </p>
 
                 <img id="contentScroll" center-step="10"
                     src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
+
+                <p id="contentScroll" center-step="11" class="left-location">
+
+                    Ptolemy knew a lot about the Mediterranean region. For the Greeks, the Mediterranean was the center
+                    of the inhabited world. Therefore, the region is represented fairly accurately on the map.
+
+
+                </p>
+                <div class="mapContainer" persistent="TRUE">
+                    <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE" transition="TRUE"
+                        src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
+                    <div class="highlight one" id="contentScroll" center-step="11"></div>
+                    <div class="highlight two" id="contentScroll" center-step="12"></div>
+
+                </div>
+
+
 
 
             </figure>
@@ -154,6 +173,12 @@
                 <div class="spacer"></div>
 
                 <div class="step" data-step="11"></div>
+                <div class="spacer"></div>
+
+                <div class="step" data-step="12"></div>
+                <div class="spacer"></div>
+
+                <div class="step" data-step="13"></div>
                 <div class="spacer"></div>
 
 
@@ -257,6 +282,12 @@
             currentElement = d3.selectAll("[center-step ='" + `${response.index}` + "']");
             allElements = d3.selectAll("#contentScroll:not([center-step ='" + `${response.index}` + "'])");
 
+            // Selecting persistent element;
+            persistentMap = d3.selectAll("[persistent = TRUE]")
+            transitionMap = d3.selectAll("[transition = TRUE]")
+
+
+
             currentElement.classed("is-current", true);
             allElements.classed("is-current", false);
 
@@ -267,7 +298,7 @@
 
                 // opacity = 1;
 
-            } else if (response.progress > 0.33 & response.progress < 0.66) {
+            } else if (response.progress > 0.33 && response.progress < 0.66) {
 
                 // Stay at opacity 1 between 33% and 66%
                 opacity = 1;
@@ -288,6 +319,38 @@
             // }
 
             currentElement.style("opacity", opacity);
+
+            if (response.index === 11 && response.progress <= 0.33) {
+                // Fade in: from 0 to 1 over the first 33%
+                opacity = (response.progress) * 3;
+
+                persistentMap.style("opacity", opacity);
+
+            } else if (response.index >= 11 && response.index <= 13) {
+
+                persistentMap.style("opacity", 1);
+
+            } else if (response.index === 13 && response.progress >= 0.66) {
+
+                opacity = 3 - response.progress * 3;
+
+                persistentMap.style("opacity", opacity);
+
+            } else {
+
+                persistentMap.style("opacity", 0);
+            }
+
+            if (response.index === 12 && response.progress > 0 && response.progress < 1) {
+                d3.select(".mapContainer")
+                    .classed("transition", true);
+            } else {
+
+                d3.select(".mapContainer")
+                    .classed("transition", false);
+
+            }
+
         }
 
         function init() {
