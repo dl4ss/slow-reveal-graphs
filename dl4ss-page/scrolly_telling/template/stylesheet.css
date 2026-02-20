@@ -1,0 +1,231 @@
+#scrolly {
+    position: relative;
+    background-color: #ffffff;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+article {
+    position: relative;
+    padding: 0;
+    /* max-width: 20rem; */
+    /* margin: 0 auto; */
+    width: 100%;
+}
+
+section {
+    pointer-events: none;
+    background: none;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+figure {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 1rem;
+    width: 100%;
+    margin: 0;
+    background-color: #8a8a8a;
+
+}
+
+figure p {
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    opacity: 0;
+    font-size: 2rem;
+    color: #000000;
+    pointer-events: none;
+    z-index: 999;
+
+}
+
+figure img {
+    opacity: 0;
+    width: 800px;
+    object-fit: scale-down;
+    max-height: fit-content;
+
+}
+
+figure p.is-current {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 999;
+}
+
+.step-content {
+    position: relative;
+    width: 100%;
+}
+
+.left-location,
+.right-location {
+    position: absolute;
+}
+
+.left-location {
+    left: 0%;
+    width: 500px;
+}
+
+.right-location {
+    right: 5%;
+    width: 500px;
+    object-fit: scale-down;
+}
+
+/* figure img.is-current {
+    opacity: 1;
+} */
+
+.spacer {
+    margin: 0;
+    color: #ffffff;
+    background-color: rgba(95, 68, 68, 0);
+    opacity: 0;
+    outline: 10px solid red;
+}
+
+.step {
+    margin: 0;
+    color: #ffffff;
+    background-color: rgba(95, 68, 68, 0);
+    opacity: 1;
+    /* Centering <p> within <div> */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    outline: 10px solid red;
+    z-index: 0;
+}
+
+.step:last-child {
+    margin-bottom: 5rem;
+    /* I'm sure there's a way to programatically center the last child, but this works for now.*/
+    opacity: 1;
+}
+
+.step.is-fading-in p {
+    /* background-color: goldenrod;
+    color: #3b3b3b; */
+    position: sticky;
+    place-items: center;
+    top: 50%;
+    /* transform: translateY(-50%); */
+    margin: 0;
+}
+
+.step.is-active p {
+    background-color: goldenrod;
+    color: #3b3b3b;
+    position: sticky;
+    top: 50%;
+    /* transform: translateY(-50%); */
+    margin: 0;
+}
+
+.step.is-fading-out p {
+    /* background-color: goldenrod;
+    color: #3b3b3b; */
+    position: sticky;
+    top: 50%;
+    /* transform: translateY(-50%); */
+    margin: 0;
+}
+
+.step p {
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.5rem;
+    background-color: #3b3b3b;
+}
+
+.mapContainer {
+    transform: translateX(-20%);
+    /* transform: translateY(100%); */
+    background-color: #000000;
+    outline: 10px solid rgb(38, 0, 255);
+    position: absolute;
+    width: 700px;
+    right: 0%;
+    opacity: 0;
+    overflow: hidden;
+
+}
+
+.mapContainer img {
+    position: relative;
+    transform: translateX(5%);
+    min-width: 100%;
+    object-fit: fill;
+    opacity: 1;
+    transition: transform 0.6s ease;
+}
+
+.mapContainer.transition img {
+    transition: transform 0.6s ease;
+    transform: scale(3) translateX(15%) translateY(10%);
+}
+
+
+.highlight {
+    border: 2px solid blue;
+    position: absolute;
+    z-index: 1500;
+    opacity: 0;
+
+}
+
+.highlight.one {
+    width: 175px;
+    height: 150px;
+    top: 20%;
+    left: 20%;
+}
+
+.highlight.two {
+    width: 80px;
+    height: 100px;
+    top: 22.5%;
+    left: 32.5%;
+}
+
+.debug-crosshair {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+.debug-crosshair::before,
+.debug-crosshair::after {
+    content: "";
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Vertical line */
+.debug-crosshair::before {
+    width: 5px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-0.5px);
+}
+
+/* Horizontal line */
+.debug-crosshair::after {
+    height: 5px;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-0.5px);
+}
