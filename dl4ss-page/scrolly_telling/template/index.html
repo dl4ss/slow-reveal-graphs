@@ -34,16 +34,7 @@
             </figure>
 
             <article>
-                <!-- Initial step -->
-                <div class="step" data-step="0"></div>
-
-                <!-- Optional Spacer -->
-                <div class="spacer"></div>
-
-                <!-- Repeat as needed -->
-                <div class="step" data-step="1"></div>
-                <div class="spacer"></div>
-
+                <!-- Intentionally left blank -->
             </article>
 
             <figure>
@@ -157,10 +148,41 @@
 
         }
 
+        // Attempting to make this cleaner
+
+        function divCreator(finalNumber, stepHeight) {
+
+            const target = document.querySelector("#scrolly > article");
+
+
+            for (let dataStep = 0; dataStep < finalNumber + 1; dataStep++) {
+
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("step");
+                newDiv.setAttribute('data-step', dataStep);
+
+                const spacerDiv = document.createElement("div");
+                spacerDiv.classList.add("spacer");
+
+                // Adding steps to DOM
+                target.appendChild(newDiv);
+                target.appendChild(spacerDiv);
+
+                // Setting step height
+                newDiv.style.height = stepHeight + "px";
+                spacerDiv.style.height = "500" + "px";
+
+            }
+
+        }
+
         function init() {
 
             // Setup resize event listener
             window.addEventListener("resize", handleResize);
+
+            // Enter the number of reveal steps here! (Includes a step 0)
+            divCreator(1, 500);
 
             // Force a resize on load to ensure proper dimensions are sent to scrollama
             handleResize();
@@ -175,7 +197,7 @@
                 })
                 .onStepEnter(handleStepEnter)
                 .onStepExit(handleStepExit);
-                // .onStepProgress(handleStepProgress);
+            // .onStepProgress(handleStepProgress);
         }
 
         // kick things off

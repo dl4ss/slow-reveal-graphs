@@ -155,7 +155,7 @@ figure p.is-current {
     position: absolute;
     width: 700px;
     right: 0%;
-    opacity: 1;
+    opacity: 0;
     overflow: hidden;
 
 }
@@ -195,6 +195,13 @@ figure p.is-current {
     height: 100px;
     top: 22.5%;
     left: 32.5%;
+}
+
+.highlight.three {
+    width: 100px;
+    height: 100px;
+    top: 25%;
+    left: 22.5%;
 }
 
 .debug-crosshair {
