@@ -90,7 +90,7 @@
                 return i === response.index;
             });
 
-            var currentElement = document.querySelector("[data-step ='" + `${response.index}` + "']");
+            // var currentElement = d3.selectAll("[data-step ='" + `${response.index}` + "']");
 
             currentElement.classList.remove("is-fading-out");
         }
@@ -98,7 +98,7 @@
         function handleStepExit(response) {
             console.log(response);
 
-            d3.select("[center-step ='" + `${response.index}` + "']").classed("is-current", false);
+            d3.selectAll("[center-step ='" + `${response.index}` + "']").classed("is-current", false);
 
 
             // add color to current step only
@@ -106,7 +106,7 @@
                 return i === response.index;
             });
 
-            var currentElement = document.querySelector("[data-step ='" + `${response.index}` + "']");
+            var currentElement = d3.selectAll("[data-step ='" + `${response.index}` + "']");
 
             currentElement.classList.remove("is-active");
         }

@@ -54,7 +54,7 @@ figure img {
 
 }
 
-figure p.is-current {
+figure .is-current {
     opacity: 1;
     pointer-events: auto;
     z-index: 999;
