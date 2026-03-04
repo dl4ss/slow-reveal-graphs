@@ -51,7 +51,10 @@ figure img {
     width: 800px;
     object-fit: scale-down;
     max-height: fit-content;
+}
 
+figure img.vertical-map {
+    transform:rotate(90deg);
 }
 
 figure .is-current {

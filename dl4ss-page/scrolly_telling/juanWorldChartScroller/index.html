@@ -47,16 +47,53 @@
                 <p id="contentScroll" center-step="4" class="left-location">
                     In fact, de la Cosa was the owner of the <i>Santa Maria</i>, one of the three ships that sailed with
                     Columbus in 1492.
-
-
                 </p>
                 <img id="contentScroll" center-step="4" class="right-location"
                     src="https://static.wixstatic.com/media/5875bf_90a50f2215fb435bb5cf165d2b7d291d~mv2.png">
+
+                <p id="contentScroll" center-step="5">
+                    De la Cosa most likely created his world map in 1500 for the Spanish crown, to highlight their newly
+                    discovered territories in the western hemisphere. This context is important, as is what de la Cosa
+                    knew, and what he didn't know. Like all maps, this map tells a story.
+                    <br><br>
+                    Before we continue, take some time to study the map. What do you notice? What looks familiar and
+                    accurate? What looks unfamiliar or inaccurate? What do you wonder?
+                    <br><br>
+                    When you're ready, keep scrolling to learn more.
+                </p>
+
+                <img id="contentScroll" center-step="6"
+                    src="https://static.wixstatic.com/media/5875bf_129683ba51c74d1bb2eb1629a58b7f35~mv2.webp">
+
+                <p id="contentScroll" center-step="7" class="left-location">
+                    The first thing to know about De la Cosa's map, is that he actually drew it with west facing upward,
+                    as is shown by the compass rose he drew in the middle of the map
+
+                </p>
+                <img id="contentScroll" center-step="7" class="right-location vertical-map" persistent="TRUE"
+                    src="https://static.wixstatic.com/media/5875bf_129683ba51c74d1bb2eb1629a58b7f35~mv2.webp">
+
+                <p id="contentScroll" center-step="8" class="left-location">
+                    One way we know that this is the orientation he intended is by the image of the person at the top of
+                    the map.
+                </p>
+
+                <p id="contentScroll" center-step="9" class="left-location">
+                    If you look closely, you can see it's a drawing of St. Christopher carrying the infant Jesus across
+                    a river. This was clearly an homage to Christopher Columbus, as well as a reference to the religious
+                    motivations behind the Spanish Crown's sponsorship of westward exploration.
+
+
+                </p>
+                <img id="contentScroll" center-step="9" class="right-location"
+                    src="https://static.wixstatic.com/media/5875bf_494e4d68f6494bce85e965597fd58914~mv2.png">
 
             </figure>
 
             <article>
                 <!-- Intentionally left blank -->
+                <!-- <div class="step" data-step="0"></div>
+                <div class="spacer"></div> -->
             </article>
 
             <figure>
@@ -69,108 +106,6 @@
     </main>
 
     <script>
-        // using d3 for convenience
-        var main = d3.select("main");
-        var scrolly = main.select("#scrolly");
-        var figure = scrolly.select("figure");
-        var article = scrolly.select("article");
-        var step = article.selectAll(".step");
-        var spacer = article.selectAll(".spacer");
-
-        // initialize the scrollama
-        var scroller = scrollama();
-
-
-        // generic window resize listener event
-        function handleResize() {
-            // 1. update height of step elements
-            // var stepH = Math.floor(window.innerHeight * 0.75);
-
-            var stepH = 500;
-            step.style("height", stepH + "px");
-
-            spacer.style("height", "500px");
-
-            var figureHeight = window.innerHeight / 1.5;
-            var figureMarginTop = (window.innerHeight - figureHeight) / 2;
-
-            figure
-                .style("height", figureHeight + "px")
-                .style("top", figureMarginTop + "px");
-        }
-
-        // scrollama event handlers
-        function handleStepEnter(response) {
-
-            currentElement = d3.selectAll("[center-step ='" + `${response.index}` + "']");
-
-            // Tagging element as current
-            currentElement.classed("is-current", true);
-
-            // Tagging element as active
-            step.classed("is-active", function (d, i) {
-                return i === response.index;
-            });
-
-            // var currentElement = d3.selectAll("[data-step ='" + `${response.index}` + "']");
-
-            currentElement.classList.remove("is-fading-out");
-        }
-
-        function handleStepExit(response) {
-            console.log(response);
-
-            d3.selectAll("[center-step ='" + `${response.index}` + "']").classed("is-current", false);
-
-
-            // add color to current step only
-            step.classed("is-fading-out", function (d, i) {
-                return i === response.index;
-            });
-
-            var currentElement = d3.selectAll("[data-step ='" + `${response.index}` + "']");
-
-            currentElement.classList.remove("is-active");
-        }
-
-        function handleStepProgress(response) {
-            console.log(response);
-
-            let opacity;
-
-            // Defining the current element and non-current elements;
-            currentElement = d3.selectAll("[center-step ='" + `${response.index}` + "']");
-            allElements = d3.selectAll("#contentScroll:not([center-step ='" + `${response.index}` + "'])");
-
-
-            // Tagging element as current and removing tag from others
-            currentElement.classed("is-current", true);
-            allElements.classed("is-current", false);
-
-            if (response.progress <= 0.33) {
-
-                // Fade in: from 0 to 1 over the first 33%
-                opacity = (response.progress) * 3;
-
-                // opacity = 1;
-
-            } else if (response.progress > 0.33 && response.progress < 0.66) {
-
-                // Stay at opacity 1 between 33% and 66%
-                opacity = 1;
-
-            } else {
-                // Fade out: from 1 to 0 over the last 33%
-                opacity = 3 - response.progress * 3;
-                // opacity = 1;
-
-            }
-
-            currentElement.style("opacity", opacity);
-
-        }
-
-        // Attempting to make this cleaner
 
         function divCreator(finalNumber, stepHeight) {
 
@@ -198,13 +133,135 @@
 
         }
 
+        // Enter the number of reveal steps here! (Includes a step 0)
+        divCreator(25, 500);
+
+
+        // using d3 for convenience
+        var main = d3.select("main");
+        var scrolly = main.select("#scrolly");
+        var figure = scrolly.select("figure");
+        var article = scrolly.select("article");
+        var step = article.selectAll(".step");
+        var spacer = article.selectAll(".spacer");
+
+        // Getting pre-defined sizes
+        var imgWidth = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect().width;
+        var rightImgWidth = document.querySelector("#contentScroll.right-location").getBoundingClientRect().width;
+        var leftImgWidth = document.querySelector("#contentScroll.left-location").getBoundingClientRect().width;
+        var stepH = 500;
+
+
+        // initialize the scrollama
+        var scroller = scrollama();
+
+        // generic window resize listener event
+        function handleResize() {
+
+            // Setting scale based on a 1920px by 911px window;
+
+            var horizontalScale = window.innerWidth / 1920;
+            var verticalScale = window.innerHeight / 911;
+
+            // Setting step and spacer height;
+            //Scrollama does not like trying to resize the step element;
+
+            // step.style("height", stepH * verticalScale + "px");
+            spacer.style("height", stepH * verticalScale + "px");
+
+            var figureHeight = window.innerHeight / 1.5;
+            var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+
+            figure
+                .style("height", figureHeight + "px")
+                .style("top", figureMarginTop + "px");
+
+            // Scaling element within the figure
+
+            // Adjusting images
+
+            var childElements = document.querySelectorAll("img#contentScroll");
+
+            // childElements.style("height", stepH * verticalScale + "px");
+
+            // console.log(childElements);
+
+            childElements.forEach(element => {
+                element.style.height = imgWidth * verticalScale + "px";
+            });
+
+            scroller.resize();
+
+        }
+
+        // scrollama event handlers
+
+        function handleStepProgress(response) {
+            console.log(response);
+
+            let opacity;
+
+            // Defining the current element and non-current elements;
+            currentElement = d3.selectAll("[center-step ='" + `${response.index}` + "']");
+            allElements = d3.selectAll("#contentScroll:not([center-step ='" + `${response.index}` + "'])");
+
+            // Selecting persistent elements
+            persistentMap = d3.selectAll("[persistent = TRUE]")
+
+
+            // Tagging element as current and removing tag from others
+            currentElement.classed("is-current", true);
+            allElements.classed("is-current", false);
+
+            if (response.progress <= 0.33) {
+
+                // Fade in: from 0 to 1 over the first 33%
+                opacity = (response.progress) * 3;
+
+                // opacity = 1;
+
+            } else if (response.progress > 0.33 && response.progress < 0.66) {
+
+                // Stay at opacity 1 between 33% and 66%
+                opacity = 1;
+
+            } else {
+                // Fade out: from 1 to 0 over the last 33%
+                opacity = 3 - response.progress * 3;
+                // opacity = 1;
+
+            }
+
+            currentElement.style("opacity", opacity);
+
+
+            if (response.index === 7 && response.progress <= 0.33) {
+                // Fade in: from 0 to 1 over the first 33%
+                opacity = (response.progress) * 3;
+
+                persistentMap.style("opacity", opacity);
+
+            } else if (response.index === 8 && response.progress >= 0.66) {
+
+                opacity = 3 - response.progress * 3;
+
+                persistentMap.style("opacity", opacity);
+
+            } else if (response.index >= 7 && response.index <= 8) {
+
+                persistentMap.style("opacity", 1);
+
+            } else {
+
+                persistentMap.style("opacity", 0);
+            }
+
+        }
+
         function init() {
 
             // Setup resize event listener
             window.addEventListener("resize", handleResize);
-
-            // Enter the number of reveal steps here! (Includes a step 0)
-            divCreator(25, 500);
 
             // Force a resize on load to ensure proper dimensions are sent to scrollama
             handleResize();
@@ -215,15 +272,14 @@
                     step: "#scrolly article .step",
                     offset: 0.5,
                     progress: true, // Set to false for discrete steps
-                    debug: false
+                    debug: true
                 })
-                // .onStepEnter(handleStepEnter)
-                // .onStepExit(handleStepExit);
                 .onStepProgress(handleStepProgress);
         }
 
         // kick things off
         init();
+
     </script>
 
     <!-- Uncomment to see debugging center crosshairs  -->
