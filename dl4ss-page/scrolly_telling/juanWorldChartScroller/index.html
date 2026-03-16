@@ -146,9 +146,10 @@
         var spacer = article.selectAll(".spacer");
 
         // Getting pre-defined sizes
-        var imgWidth = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect().width;
-        var rightImgWidth = document.querySelector("#contentScroll.right-location").getBoundingClientRect().width;
-        var leftImgWidth = document.querySelector("#contentScroll.left-location").getBoundingClientRect().width;
+        var centerImgSize = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect();
+        var rightImgSize = document.querySelector("#contentScroll.right-location").getBoundingClientRect();
+        var leftImgSize = document.querySelector("#contentScroll.left-location").getBoundingClientRect();
+        var textSize = parseInt(window.getComputedStyle(document.querySelector("p#contentScroll")).getPropertyValue("font-size"), 10);
         var stepH = 500;
 
 
@@ -158,7 +159,7 @@
         // generic window resize listener event
         function handleResize() {
 
-            // Setting scale based on a 1920px by 911px window;
+            // Setting scale based on a 1920px by 911px window. Default 32pt font;
 
             var horizontalScale = window.innerWidth / 1920;
             var verticalScale = window.innerHeight / 911;
@@ -180,14 +181,30 @@
 
             // Adjusting images
 
-            var childElements = document.querySelectorAll("img#contentScroll");
+            var centerImgElements = document.querySelectorAll("img#contentScroll:not(.right-location)");
 
-            // childElements.style("height", stepH * verticalScale + "px");
+            centerImgElements.forEach(element => {
 
-            // console.log(childElements);
+                element.style.width = centerImgSize.width * horizontalScale + "px";
+                element.style.height = centerImgSize.height * verticalScale + "px";
 
-            childElements.forEach(element => {
-                element.style.height = imgWidth * verticalScale + "px";
+            });
+
+            var rightImgElements = document.querySelectorAll("img#contentScroll.right-location");
+
+            rightImgElements.forEach(element => {
+
+                element.style.width = rightImgElements.width * horizontalScale + "px";
+                element.style.height = rightImgSize.height * verticalScale + "px";
+
+            });
+
+            var textElements = document.querySelectorAll("p#contentScroll");
+
+            textElements.forEach(element => {
+
+                element.style.fontSize = textSize * verticalScale + "px";
+
             });
 
             scroller.resize();
