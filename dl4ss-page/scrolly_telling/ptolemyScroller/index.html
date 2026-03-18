@@ -162,19 +162,42 @@
         var step = article.selectAll(".step");
         var spacer = article.selectAll(".spacer");
 
+        // Getting pre-defined sizes
+        var centerImgSize = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect();
+        var rightImgSize = document.querySelector("#contentScroll.right-location").getBoundingClientRect();
+        var leftImgSize = document.querySelector("#contentScroll.left-location").getBoundingClientRect();
+        var highlightSquare = document.querySelector("#contentScroll.highlight").getBoundingClientRect();
+        var highlightMapSize = document.querySelector("div.mapContainer").getBoundingClientRect();
+        var textSize = parseInt(window.getComputedStyle(document.querySelector("p#contentScroll")).getPropertyValue("font-size"), 10);
+        var stepH = 500;
+
+        // Storing highlighting sizedv
+        const rects = document.querySelectorAll("div#contentScroll.highlight");
+
+        rects.forEach(el => {
+            const rect = el.getBoundingClientRect();   // original CSS size
+            el.dataset.origWidth = rect.width;
+            el.dataset.origHeight = rect.height;
+        });
+
+
+
         // initialize the scrollama
         var scroller = scrollama();
 
-
         // generic window resize listener event
         function handleResize() {
-            // 1. update height of step elements
-            // var stepH = Math.floor(window.innerHeight * 0.75);
 
-            var stepH = 500;
-            step.style("height", stepH + "px");
+            // Setting scale based on a 1920px by 911px window. Default 32pt font;
 
-            spacer.style("height", "500px");
+            var horizontalScale = window.innerWidth / 1920;
+            var verticalScale = window.innerHeight / 911;
+
+            // Setting step and spacer height;
+            //Scrollama does not like trying to resize the step element;
+
+            // step.style("height", stepH * verticalScale + "px");
+            spacer.style("height", stepH * verticalScale + "px");
 
             var figureHeight = window.innerHeight / 1.5;
             var figureMarginTop = (window.innerHeight - figureHeight) / 2;
@@ -183,49 +206,71 @@
                 .style("height", figureHeight + "px")
                 .style("top", figureMarginTop + "px");
 
+            // Scaling element within the figure
 
-            // 3. tell scrollama to update new element dimensions
-            // scroller.resize();
+            // Adjusting images
+
+            var centerImgElements = document.querySelectorAll("img#contentScroll:not(.right-location)");
+
+            centerImgElements.forEach(element => {
+
+                element.style.width = centerImgSize.width * horizontalScale + "px";
+                element.style.height = centerImgSize.height * verticalScale + "px";
+
+            });
+
+            var rightImgElements = document.querySelectorAll("img#contentScroll.right-location");
+
+            rightImgElements.forEach(element => {
+
+                element.style.width = rightImgElements.width * horizontalScale + "px";
+                element.style.height = rightImgSize.height * verticalScale + "px";
+
+            });
+
+            // Adjusting highlighting squares;
+
+            var highlightMap = document.querySelectorAll("div.mapContainer");
+
+            highlightMap.forEach(element => {
+
+                element.style.width = highlightMapSize.width * horizontalScale + "px";
+                element.style.height = highlightMapSize.height * verticalScale + "px";
+
+            });
+
+            // Setting adjustments for highlighted squares
+            var highlightMapSizeAdj = document.querySelector("div.mapContainer").getBoundingClientRect();
+            var mapHorizontal = highlightMapSizeAdj.width / highlightMapSize.width;
+            var mapVertical = highlightMapSizeAdj.height / highlightMapSize.height;
+
+            var highlightMapSq = document.querySelectorAll("div#contentScroll.highlight.is-current");
+            // console.log(highlightMapSq)
+
+            rects.forEach(el => {
+                el.style.width = (el.dataset.origWidth * mapHorizontal) + "px";
+                // el.style.height = (el.dataset.origHeight * mapVertical) + "px";
+                // console.log(mapHorizontal)
+            });
+
+
+
+            var textElements = document.querySelectorAll("p#contentScroll");
+
+            textElements.forEach(element => {
+
+                element.style.fontSize = textSize * verticalScale + "px";
+
+            });
+
+            scroller.resize();
+
         }
 
         // scrollama event handlers
-        function handleStepEnter(response) {
-
-            // var centerElement = document.querySelector("[center-step ='" + `${response.index}` + "']");
-
-            currentElement = d3.selectAll("[center-step ='" + `${response.index}` + "']");
-
-            currentElement.classed("is-current", true);
-
-            // add color to current step only
-            step.classed("is-active", function (d, i) {
-                return i === response.index;
-            });
-
-            var currentElement = document.querySelector("[data-step ='" + `${response.index}` + "']");
-
-            currentElement.classList.remove("is-fading-out");
-        }
-
-        function handleStepExit(response) {
-            console.log(response);
-            // response = { element, direction, index }
-
-            d3.select("[center-step ='" + `${response.index}` + "']").classed("is-current", false);
-
-
-            // add color to current step only
-            step.classed("is-fading-out", function (d, i) {
-                return i === response.index;
-            });
-
-            var currentElement = document.querySelector("[data-step ='" + `${response.index}` + "']");
-
-            currentElement.classList.remove("is-active");
-        }
 
         function handleStepProgress(response) {
-            console.log(response);
+            // console.log(response);
 
             let opacity;
 
@@ -277,15 +322,15 @@
 
                 persistentMap.style("opacity", opacity);
 
-            } else if (response.index >= 11 && response.index <= 14) {
-
-                persistentMap.style("opacity", 1);
-
             } else if (response.index === 14 && response.progress >= 0.66) {
 
                 opacity = 3 - response.progress * 3;
 
                 persistentMap.style("opacity", opacity);
+
+            } else if (response.index >= 11 && response.index <= 14) {
+
+                persistentMap.style("opacity", 1);
 
             } else {
 
@@ -353,8 +398,6 @@
                     progress: true,
                     debug: false
                 })
-                // .onStepEnter(handleStepEnter)
-                // .onStepExit(handleStepExit);
                 .onStepProgress(handleStepProgress);
         }
 

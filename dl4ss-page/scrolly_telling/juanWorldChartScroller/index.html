@@ -94,6 +94,14 @@
                 <!-- Intentionally left blank -->
                 <!-- <div class="step" data-step="0"></div>
                 <div class="spacer"></div> -->
+
+                <!-- <div class="mapContainer" persistent="TRUE">
+                    <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE" transition="TRUE"
+                        src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
+                    <div class="highlight one" id="contentScroll" center-step="11"></div>
+                    <div class="highlight two" id="contentScroll" center-step="12"></div>
+                </div> -->
+
             </article>
 
             <figure>
@@ -271,6 +279,16 @@
             } else {
 
                 persistentMap.style("opacity", 0);
+            }
+
+            if (response.index === 7 && response.progress > 0 && response.progress < 1) {
+                d3.select(".mapContainer")
+                    .classed("transition", true);
+            } else {
+
+                d3.select(".mapContainer")
+                    .classed("transition", false);
+
             }
 
         }

@@ -154,6 +154,7 @@ figure p.is-current {
     outline: 10px solid rgb(38, 0, 255);
     position: absolute;
     width: 700px;
+    aspect-ratio: 700/482.797;
     right: 0%;
     opacity: 0;
     overflow: hidden;
@@ -180,14 +181,16 @@ figure p.is-current {
     position: absolute;
     z-index: 1500;
     opacity: 0;
+    transform: translate(-50%, -50%)
 
 }
 
 .highlight.one {
     width: 175px;
-    height: 150px;
-    top: 20%;
-    left: 20%;
+    /* height: 150px; */
+    aspect-ratio: 175/150;
+    top: 35%;
+    left: 32.5%;
 }
 
 .highlight.two {
