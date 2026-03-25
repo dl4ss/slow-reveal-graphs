@@ -11,9 +11,20 @@
 
 <body>
 
+    <div class="textSizeWrapper">
+        <div class="textSizeTab"></div>
+
+        <div class="textSizeSelector">
+            <p>Select your perferred text size</p>
+            <button onclick="textResize(24)">Small</button>
+            <button onclick="textResize(32)">Medium</button>
+            <button onclick="textResize(48)">Large</button>
+        </div>
+    </div>
+
+
     <main>
         <section id="background">
-
         </section>
         <section id="scrolly">
 
@@ -125,12 +136,14 @@
 
                 </p>
                 <div class="mapContainer" persistent="TRUE">
-                    <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE" transition="TRUE"
-                        src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
-                    <div class="highlight one" id="contentScroll" center-step="11"></div>
-                    <div class="highlight two" id="contentScroll" center-step="12"></div>
-                    <div class="highlight three" id="contentScroll" center-step="13"></div>
-
+                    <!-- <div class="imageWrapper"> -->
+                        <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE"
+                            transition="TRUE"
+                            src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
+                        <div class="highlight one" id="contentScroll" center-step="11"></div>
+                        <div class="highlight two" id="contentScroll" center-step="12"></div>
+                        <div class="highlight three" id="contentScroll" center-step="13"></div>
+                    <!-- </div> -->
                 </div>
 
 
@@ -166,21 +179,18 @@
         var centerImgSize = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect();
         var rightImgSize = document.querySelector("#contentScroll.right-location").getBoundingClientRect();
         var leftImgSize = document.querySelector("#contentScroll.left-location").getBoundingClientRect();
-        var highlightSquare = document.querySelector("#contentScroll.highlight").getBoundingClientRect();
         var highlightMapSize = document.querySelector("div.mapContainer").getBoundingClientRect();
         var textSize = parseInt(window.getComputedStyle(document.querySelector("p#contentScroll")).getPropertyValue("font-size"), 10);
         var stepH = 500;
 
-        // Storing highlighting sizedv
+        // Getting original dimensions for highlight squares and storing them
         const rects = document.querySelectorAll("div#contentScroll.highlight");
 
-        rects.forEach(el => {
-            const rect = el.getBoundingClientRect();   // original CSS size
-            el.dataset.origWidth = rect.width;
-            el.dataset.origHeight = rect.height;
+        rects.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            element.dataset.origWidth = rect.width;
+            element.dataset.origHeight = rect.height;
         });
-
-
 
         // initialize the scrollama
         var scroller = scrollama();
@@ -234,8 +244,16 @@
 
             highlightMap.forEach(element => {
 
-                element.style.width = highlightMapSize.width * horizontalScale + "px";
-                element.style.height = highlightMapSize.height * verticalScale + "px";
+                var mapWidth = highlightMapSize.width * horizontalScale;
+
+                if (mapWidth > 700) {
+                    mapWidth = 700
+                } else if (mapWidth < 500) {
+                    mapWidth = 500
+                };
+
+                element.style.width = mapWidth + "px";
+                // element.style.height = highlightMapSize.height * verticalScale + "px";
 
             });
 
@@ -244,28 +262,29 @@
             var mapHorizontal = highlightMapSizeAdj.width / highlightMapSize.width;
             var mapVertical = highlightMapSizeAdj.height / highlightMapSize.height;
 
-            var highlightMapSq = document.querySelectorAll("div#contentScroll.highlight.is-current");
-            // console.log(highlightMapSq)
-
-            rects.forEach(el => {
-                el.style.width = (el.dataset.origWidth * mapHorizontal) + "px";
-                // el.style.height = (el.dataset.origHeight * mapVertical) + "px";
+            // Adjusting sizes for highlighting;
+            rects.forEach(element => {
+                element.style.width = (element.dataset.origWidth * mapHorizontal) + "px";
                 // console.log(mapHorizontal)
-            });
-
-
-
-            var textElements = document.querySelectorAll("p#contentScroll");
-
-            textElements.forEach(element => {
-
-                element.style.fontSize = textSize * verticalScale + "px";
-
             });
 
             scroller.resize();
 
         }
+
+        // Resizing text
+
+        function textResize(fontSize) {
+
+            var textElements = document.querySelectorAll("p#contentScroll");
+
+            textElements.forEach(element => {
+
+                element.style.fontSize = fontSize + "px";
+
+            });
+        }
+
 
         // scrollama event handlers
 
