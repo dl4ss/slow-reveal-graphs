@@ -26,41 +26,20 @@ library(tidyverse)
 font_add_google("Puritan", "Puritan")
 showtext_auto()
 
+# reading in text data
+text_dat <- readxl::read_xlsx(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "text_position.xlsx"))
+
 # data frame from mapdata library
 state <- map_data("state")
-
-state |> 
-  ggplot(aes(x = long, y = lat, group = group)) + 
-  geom_polygon() +
-  coord_map("azequidistant")
-
-
-#Data frame with data from census.gov
-df <- data.frame(states = c("washington", "oregon", "idaho", "montana", "california", "arizona",
-                            "new mexico", "nevada", "utah", "wyoming", "colorado", "oklahoma",
-                            "kansas", "nebraska", "south dakota", "north dakota", "minnesota",
-                            "iowa", "illinois", "wisconsin", "michigan", "indiana", "ohio",
-                            "west virginia", "pennsylvania", "new york", "massachusetts",
-                            "vermont", "new hampshire", "maine", "rhode island", "connecticut",
-                            "new jersey", "texas", "missouri", "kentucky", "tennessee",
-                            "alabama", "arkansas", "georgia", "florida", "north carolina", "virginia",
-                            "district of columbia", "maryland", "delaware", "louisiana", "mississippi",
-                            "south carolina"), 
-                 percentage = c(0.5, 0.4, 0.2, 1.1, 0.9, 2.3, 1.2, 0.5, 0.3, 1.5, 1.5, 4.8, 3.5, 0.9,
-                                0.2, 0.2, 0.3, 0.6, 1.5, 0.1, 0.7, 2.0, 2.37, 4.3, 2.0, 1.2, 1.0, 0.3, 0.2,
-                                0.2, 2.1, 1.7, 3.3, 21.8, 5.6, 14.4, 24.4, 44.8, 46.7, 42.5, 34.7, 38.4, 32.8,
-                                20.7, 16.8, 27.4, 50.0, 57.6, 59.8))
-
-
 
 #Adding state abbreviations
 centroids <- data.frame(region = tolower(state.name), long = state.center$x, lat = state.center$y)
 centroids$abb <- state.abb[match(centroids$region, tolower(state.name))]
 
 #creating new abbreviations 
-Abb <- c("ALA.","AK","ARIZ.","ARK.","CAL.","COLO.","CONN.","DEL.","FLA.","GA.","HI",'IDAHO',"ILL.",
-         "IND.","IOWA","KANS.","KY.","LA.","ME.","MD.","MASS.","MICH.","MINN.","MISS.","MO.","MONT.",
-         "NEBR.","NEV.","N.H.","N.J.","N.M.","N.Y","N.C.","N.DAK.","OHIO","OKLA.","OREGON","PA.",
+Abb <- c("ALA.","AK","ARIZ.","ARK.","CALIF.","COLO.","CONN.","DEL.","FLA.","GA.","HI",'IDAHO',"ILL.",
+         "IND.","IOWA","KANS.","KY.","LA.","MAINE","MD.","MASS.","MICH.","MINN.","MISS.","MO.","MONT.",
+         "NEBR.","NEV.","N.H.","N.J.","N.MEX.","N.Y","N.C.","N.DAK.","OHIO","OKLA.","OREG.","PA.",
          "RI.","S.C.","S.DAK.","TENN.","TEXAS","UTAH","VT.","VA.","WASH.","W.VA.","WIS.","WYO.")
 
 
@@ -71,27 +50,41 @@ colnames(centroids)[colnames(centroids) == "abb"] <- "Abb"
 #Removing Alaska and Hawaii Abbreviations
 new_centroids <- centroids[-c(2,11),]
 
+# Importing Images
 
-#joining the data frame to state table
-new_data <- state %>% 
-  left_join(df, by = c("region" = "states"))
+img_main <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_unmask.png"))
+img_main_grob <- grid::rasterGrob(img_main)
 
-grouped_data <- new_data %>%
-  mutate(grp = case_when(percentage <= 5 ~ 'A',
-                         percentage > 5 & percentage <= 25 ~ 'B',
-                         percentage > 25 & percentage < 50 ~ 'C',
-                         percentage >= 50 ~ 'D'))
-x <- grouped_data %>%
-  left_join(centroids, by = c("region" = "region"))
+img1 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_1_cut.png"))
+img1_grob <- grid::rasterGrob(img1)
+
+img2 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_2_cut.png"))
+img2_grob <- grid::rasterGrob(img2)
+
+img3 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_3_cut.png"))
+img3_grob <- grid::rasterGrob(img3)
+
+img4 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_4_cut.png"))
+img4_grob <- grid::rasterGrob(img4)
+
+img5 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_5_cut.png"))
+img5_grob <- grid::rasterGrob(img5)
 
 #plot with data from census.gov
-plot <- ggplot(data = grouped_data, aes(x=long, y=lat, group = group, fill = grp)) +
-  geom_polygon(color = "black") +
+plot <- state |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#FCF2DA", linewidth = 0.5) +
+  ggtext::geom_richtext(aes(x = x, y = y, label = text),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        size = 18,
+                        data=text_dat |>
+                          filter(display_step != 0)) + # Set 1 for red text reveal and 0 for all text
   coord_map("azequidistant") + # to make the shape of the map look globular
-  labs(title = "PLATE III.", 
-       subtitle = "PROPORTION OF NEGROES TO TOTAL POPULATION IN 1890.") +
-  theme(plot.title = element_text(hjust = 1, family = "Puritan", size = 10),
-        plot.subtitle = element_text(hjust = 0.5, family = "Puritan", size = 17)) +
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED", 
+       subtitle = "") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
@@ -100,25 +93,43 @@ plot <- ggplot(data = grouped_data, aes(x=long, y=lat, group = group, fill = grp
         axis.ticks.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        panel.background = element_rect(colour = "black", fill =  "white")) +
+        plot.subtitle = ggtext::element_markdown(size = 100),
+        panel.background = element_rect(colour = "black", fill =  "#FCF2DA")) +
   theme(legend.position = "bottom",
-        legend.text = element_text(family = "Puritan", size = 12)) 
+        legend.text = element_text(family = "Puritan", size = 12))
 
-#modifying the legend
-plot2 <- plot + scale_fill_manual(name = NULL,
-                                  labels = c("Less than 5%",
-                                             "5 - 25",
-                                             "25 - 50",
-                                             "Over 50"),
-                                  values = c("A" = "white",
-                                             "B" = "#F7d3cf",
-                                             "C" = "#Ee938b",
-                                             "D" = "#Ae4c42")) +
-  guides(fill = guide_legend(label.position = "left", label.hjust = 1))
+# ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_unmask.png"), 
+#        plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+plot_test <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  annotation_custom(grob = img1_grob,
+                    xmin = 0.1,
+                    xmax = 0.45,
+                    ymin = -0.6) +
+  annotation_custom(grob = img2_grob,
+                    xmin = 0.25,
+                    xmax = 0.65,
+                    ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  annotation_custom(grob = img4_grob,
+                    xmin = 0.655,
+                    xmax = 0.755,
+                    ymin = 0.45) +
+  annotation_custom(grob = img5_grob,
+                    xmin = 0.775,
+                    xmax = 0.925,
+                    ymin = -0.4)
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "02_full_img.png"), 
+       plot = plot_test, width = 5732, height = 2700, units = "px", dpi = 300)
 
 #plot with state abbreviations
-plot3 <- plot2 + with(new_centroids, 
-                      annotate(geom = "text", x = long, y = lat, label = Abb, family = "Puritan"))
-
-ggsave(here::here("1890-negro-pop-density", "01_prop_full_unmasked.png"), width = 6, height = 4, units = "in")
-
+plot2 <- plot + with(new_centroids, 
+                     annotate(geom = "text", x = long, y = lat, label = Abb, family = "Puritan"))

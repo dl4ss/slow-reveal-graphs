@@ -230,9 +230,14 @@ figure p.is-current {
     transition: transform 0.6s ease;
 }
 
-.mapContainer.transition img {
+.mapContainer.transition.one img {
     transition: transform 0.6s ease;
-    transform: scale(3) translateX(15%) translateY(10%);
+    transform: scale(4) translateX(20%) translateY(15%);
+}
+
+.mapContainer.transition.two img {
+    transition: transform 0.6s ease;
+    transform: scale(2) translateX(25%) translateY(-10%);
 }
 
 
@@ -253,17 +258,37 @@ figure p.is-current {
 }
 
 .highlight.two {
-    width: 55px;
-    height: 100px;
-    top: 35%;
-    left: 37.5%;
+    width: 80px;
+    height: 80px;
+    top: 48%;
+    left: 55.5%;
 }
 
 .highlight.three {
-    width: 85px;
-    height: 100px;
-    top: 35%;
+    width: 120px;
+    height: 90px;
+    top: 50%;
+    left: 45%;
+}
+
+.highlight.four {
+    width: 650px;
+    height:70px;
+    top: 90%;
     left: 30%;
+    rotate: 30deg;
+}
+
+.highlight.five {
+    width: 0px;
+    height:0px;
+}
+
+.highlight.six {
+    width: 275px;
+    height: 190px;
+    top: 55%;
+    left: 23%;
 }
 
 .debug-crosshair {
@@ -274,6 +299,13 @@ figure p.is-current {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
+}
+
+.hanging-indent {
+    padding-left: 2em;
+    /* Indents the entire block */
+    text-indent: -2em;
+    /* Pulls the first line back to the left */
 }
 
 .debug-crosshair::before,
