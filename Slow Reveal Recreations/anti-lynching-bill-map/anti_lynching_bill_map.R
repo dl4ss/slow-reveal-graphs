@@ -70,6 +70,43 @@ img4_grob <- grid::rasterGrob(img4)
 img5 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_5_cut.png"))
 img5_grob <- grid::rasterGrob(img5)
 
+border_tx <- state |> 
+  filter(long > -106.805485,
+         long < -101.026627,
+         lat > 31.758682,
+         lat < 36.568721,
+         region %in% c("texas"))
+
+border_ok <- state |> 
+  filter(long > -103.026627,
+         long < -94.622286,
+         lat > 36.482823,
+         lat < 36.568721,
+         region %in% c("oklahoma"))
+
+border_ak <- state |> 
+  filter(long > -94.622286,
+         long < -89.666579,
+         lat > 35.951676,
+         lat < 36.968721,
+         region %in% c("arkansas"))
+
+border_tn <- state |> 
+  filter(long > -89.733393,
+         long < -89.506837,
+         lat > 36.000256,
+         lat < 36.506694,
+         region %in% c("tennessee"))
+
+border <- border_tx |> 
+  bind_rows(border_ok, border_ak, border_tn) |> 
+  mutate(order = row_number())
+
+border |> 
+  ggplot() +
+  geom_path(aes(x=long, y=lat, group = group),
+               color = "black",, linewidth = 0.5)
+
 #plot with data from census.gov
 plot <- state |> 
   ggplot() +
