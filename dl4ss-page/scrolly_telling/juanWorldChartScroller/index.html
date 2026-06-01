@@ -22,8 +22,12 @@
         <section id="scrolly">
 
             <figure>
-                <!-- Add as many steps as needed.
-                 The nummber of content steps should match up to the number of data steps. -->
+                <!-- 
+                Add as many steps as needed.
+                The nummber of content steps should match up to the number of data steps.
+                The center-step tag is used by the JavaScript in the file to adjust the opacity 
+                of the step.
+                 -->
                 <p id="contentScroll" center-step="1"><b>Juan de la Cosa's World Chart</b><br>A Virtual Tour</p>
 
                 <p id="contentScroll" center-step="2">
@@ -92,16 +96,6 @@
 
             <article>
                 <!-- Intentionally left blank -->
-                <!-- <div class="step" data-step="0"></div>
-                <div class="spacer"></div> -->
-
-                <!-- <div class="mapContainer" persistent="TRUE">
-                    <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE" transition="TRUE"
-                        src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
-                    <div class="highlight one" id="contentScroll" center-step="11"></div>
-                    <div class="highlight two" id="contentScroll" center-step="12"></div>
-                </div> -->
-
             </article>
 
             <figure>
@@ -115,6 +109,9 @@
 
     <script>
 
+        // This function serves as a shortcut to create the data steps without having to manually
+        // create them. The actual image and text elements need to be manually created and linked
+        // to the div via the center-step tag.
         function divCreator(finalNumber, stepHeight) {
 
             const target = document.querySelector("#scrolly > article");
@@ -260,6 +257,8 @@
             currentElement.style("opacity", opacity);
 
 
+            // This is specific to this scrolly teller and works to keep the image in step 7 
+            // persistent while other text changes.
             if (response.index === 7 && response.progress <= 0.33) {
                 // Fade in: from 0 to 1 over the first 33%
                 opacity = (response.progress) * 3;

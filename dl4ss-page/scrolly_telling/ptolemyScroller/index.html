@@ -132,6 +132,10 @@
                     Ptolemy knew a lot about the Mediterranean region. For the Greeks, the Mediterranean was the center
                     of the inhabited world. Therefore, the region is represented fairly accurately on the map.
                 </p>
+                <!--
+                This is where you can specify what step the highlighting squares appear on.
+                See the CSS file for how to change the positioning and shape of the squares.
+                -->
                 <div class="mapContainer" persistent="TRUE">
                     <img id="contentScroll" center-step="11" class="right-location" persistent="TRUE" transition="TRUE"
                         src="https://static.wixstatic.com/media/5875bf_c70161013ebe4a5384411d37824033e8~mv2.jpg">
@@ -214,11 +218,6 @@
 
                 </p>
 
-
-
-
-
-
             </figure>
 
             <article>
@@ -245,12 +244,13 @@
         var step = article.selectAll(".step");
         var spacer = article.selectAll(".spacer");
 
-        // Getting pre-defined sizes
+        // Getting pre-defined sizes for later resizing
         var centerImgSize = document.querySelector("img#contentScroll:not(.right-location)").getBoundingClientRect();
         var rightImgSize = document.querySelector("#contentScroll.right-location").getBoundingClientRect();
         var leftImgSize = document.querySelector("#contentScroll.left-location").getBoundingClientRect();
         var highlightMapSize = document.querySelector("div.mapContainer").getBoundingClientRect();
         var textSize = parseInt(window.getComputedStyle(document.querySelector("p#contentScroll")).getPropertyValue("font-size"), 10);
+        // 500 px for the step size is a little arbitraty. On a desktop it looks good.
         var stepH = 500;
 
         // Getting original dimensions for highlight squares and storing them
@@ -431,7 +431,7 @@
                     .classed("transition one", true);
             } else if (response.index >= 17 && response.index <= 20) {
                 d3.select(".mapContainer")
-                  .classed("transition two", true);
+                    .classed("transition two", true);
             } else {
                 d3.select(".mapContainer")
                     .classed("transition one two", false);

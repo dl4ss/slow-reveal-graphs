@@ -208,6 +208,10 @@ figure p.is-current {
     background-color: #3b3b3b;
 }
 
+/* This section is used to move the highlighting squares
+on the map. It take a bit of trial and error.
+You can bind the CSS settings to the div on line 139 in the HTML file. */
+
 .mapContainer {
     transform: translateX(-20%);
     /* transform: translateY(100%); */
@@ -273,7 +277,7 @@ figure p.is-current {
 
 .highlight.four {
     width: 650px;
-    height:70px;
+    height: 70px;
     top: 90%;
     left: 30%;
     rotate: 30deg;
@@ -281,7 +285,7 @@ figure p.is-current {
 
 .highlight.five {
     width: 0px;
-    height:0px;
+    height: 0px;
 }
 
 .highlight.six {

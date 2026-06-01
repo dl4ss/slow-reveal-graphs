@@ -12,12 +12,7 @@
 #   Louis Cousino
 
 
-
-
 # setup
-library(usmap)
-library(maps)
-library(mapdata)
 library(showtext)
 library(tidyverse)
 
@@ -27,98 +22,167 @@ font_add_google("Puritan", "Puritan")
 showtext_auto()
 
 # reading in text data
-text_dat <- readxl::read_xlsx(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "text_position.xlsx"))
+text_dat <- readxl::read_xlsx(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "text_position.xlsx"),
+                              sheet = "Horizontal Text") |> 
+  mutate(x_adj = x + 0)
 
-# data frame from mapdata library
+# data frame from ggplot2 library
 state <- map_data("state")
 
 #Adding state abbreviations
-centroids <- data.frame(region = tolower(state.name), long = state.center$x, lat = state.center$y)
-centroids$abb <- state.abb[match(centroids$region, tolower(state.name))]
+centroids <- data.frame(region = str_to_lower(state.name), long = state.center$x, lat = state.center$y) |> 
+  mutate(region = str_replace_all(region, " ", "_"))
 
-#creating new abbreviations 
-Abb <- c("ALA.","AK","ARIZ.","ARK.","CALIF.","COLO.","CONN.","DEL.","FLA.","GA.","HI",'IDAHO',"ILL.",
-         "IND.","IOWA","KANS.","KY.","LA.","MAINE","MD.","MASS.","MICH.","MINN.","MISS.","MO.","MONT.",
-         "NEBR.","NEV.","N.H.","N.J.","N.MEX.","N.Y","N.C.","N.DAK.","OHIO","OKLA.","OREG.","PA.",
-         "RI.","S.C.","S.DAK.","TENN.","TEXAS","UTAH","VT.","VA.","WASH.","W.VA.","WIS.","WYO.")
+# Loading additional data on state names
 
+state_text <- readxl::read_xlsx(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "text_position.xlsx"),
+                              sheet = "State") |>
+  as.data.frame() |>
+  mutate(region = str_replace_all(region, "\\s+", "_"))
 
-#Adding the new abbreviations
-centroids[["abb"]] <- Abb
-colnames(centroids)[colnames(centroids) == "abb"] <- "Abb"
-
-#Removing Alaska and Hawaii Abbreviations
-new_centroids <- centroids[-c(2,11),]
+#Removing Alaska and Hawaii Abbreviations and merging
+new_centroids <- centroids[-c(2,11),] |> 
+  mutate(region = str_trim(region)) |> 
+  left_join(state_text, by = join_by(region == region)) |> 
+  mutate(
+    lat = case_when(
+      Abb == "LA." ~ lat + 0.75,
+      Abb == "MD." ~ lat - 0.5,
+      Abb == "R.I." ~ lat - 1,
+      Abb == "N.J." ~ lat - 0.5,
+      TRUE ~ lat
+    ),
+    long = case_when(
+      Abb == "DEL." ~ long + 1,
+      Abb == "N.J." ~ long + 1,
+      Abb == "MD." ~ long + 0.5,
+      TRUE ~ long
+    )
+  )
 
 # Importing Images
 
-img_main <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_unmask.png"))
-img_main_grob <- grid::rasterGrob(img_main)
+img1_grob <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_1_cut.png")) |> 
+  grid::rasterGrob()
 
-img1 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_1_cut.png"))
-img1_grob <- grid::rasterGrob(img1)
+img2_grob <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_2_cut.png")) |> 
+  grid::rasterGrob()
 
-img2 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_2_cut.png"))
-img2_grob <- grid::rasterGrob(img2)
+img3_grob <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_3_cut.png")) |> 
+  grid::rasterGrob()
 
-img3 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_3_cut.png"))
-img3_grob <- grid::rasterGrob(img3)
+img4_grob <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_4_cut.png")) |> 
+  grid::rasterGrob()
 
-img4 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_4_cut.png"))
-img4_grob <- grid::rasterGrob(img4)
+img5_grob <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_5_cut.png")) |> 
+  grid::rasterGrob()
 
-img5 <- png::readPNG(here::here("Slow reveal Recreations", "anti-lynching-bill-map", "image-elements", "img_5_cut.png"))
-img5_grob <- grid::rasterGrob(img5)
 
-border_tx <- state |> 
-  filter(long > -106.805485,
-         long < -101.026627,
-         lat > 31.758682,
-         lat < 36.568721,
-         region %in% c("texas"))
 
-border_ok <- state |> 
-  filter(long > -103.026627,
-         long < -94.622286,
-         lat > 36.482823,
-         lat < 36.568721,
-         region %in% c("oklahoma"))
+# border |> 
+#   filter(region == "arkansas") |> 
+#   ggplot() +
+#   geom_path(aes(x=long, y=lat, group = group),
+#                color = "red", linewidth = 2) +
+#   geom_polygon(aes(x=long, y=lat, group = group),
+#                color = "black", fill = "#FCF2DA", linewidth = 0.5,
+#                data = state |> 
+#                  filter(region == "arkansas"))
 
-border_ak <- state |> 
-  filter(long > -94.622286,
-         long < -89.666579,
-         lat > 35.951676,
-         lat < 36.968721,
-         region %in% c("arkansas"))
+#####
+temp_state <- "ohio"
 
-border_tn <- state |> 
-  filter(long > -89.733393,
-         long < -89.506837,
-         lat > 36.000256,
-         lat < 36.506694,
-         region %in% c("tennessee"))
+state |>  
+  filter(region == temp_state) |> 
+  # filter(between(lat, 31.125, 32.5))
+  filter(lat == min(lat))
+# filter(long == min(long))
+# filter(order == min(order))
+# filter(between(lat, 36, 36.5))
 
-border <- border_tx |> 
-  bind_rows(border_ok, border_ak, border_tn) |> 
-  mutate(order = row_number())
 
-border |> 
-  ggplot() +
-  geom_path(aes(x=long, y=lat, group = group),
-               color = "black",, linewidth = 0.5)
+state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  # filter(region == temp_state) |>
+  # filter(region %in% c(temp_state, "kentucky")) |>
+  ggplot(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +
+  geom_polygon(fill = "white") +
+  geom_path() +
+  scale_color_identity() +
+  scale_linewidth_identity()
+
+#####
 
 #plot with data from census.gov
 plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
   ggplot() +
   geom_polygon(aes(x=long, y=lat, group = group),
                color = "black", fill = "#FCF2DA", linewidth = 0.5) +
-  ggtext::geom_richtext(aes(x = x, y = y, label = text),
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
                         label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
                         label.color = NA,
                         fill = NA,
-                        size = 18,
                         data=text_dat |>
                           filter(display_step != 0)) + # Set 1 for red text reveal and 0 for all text
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#FCF2DA",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 16,
+             data = new_centroids |> 
+               filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
   coord_map("azequidistant") + # to make the shape of the map look globular
   labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED", 
        subtitle = "") +
@@ -135,8 +199,11 @@ plot <- state |>
   theme(legend.position = "bottom",
         legend.text = element_text(family = "Puritan", size = 12))
 
-# ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_unmask.png"), 
-#        plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_test.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_test.png")) |> 
+  grid::rasterGrob()
 
 plot_test <- ggplot() +
   annotation_custom(grob = img_main_grob,
@@ -164,7 +231,7 @@ plot_test <- ggplot() +
                     ymin = -0.4)
 
 
-ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "02_full_img.png"), 
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "04_full_img.png"), 
        plot = plot_test, width = 5732, height = 2700, units = "px", dpi = 300)
 
 #plot with state abbreviations
