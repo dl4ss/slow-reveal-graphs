@@ -135,6 +135,8 @@ state |>
 #####
 
 #plot with data from census.gov
+
+# Full Unmasked ----
 plot <- state |> 
   mutate(
     border_color = case_when(
@@ -160,7 +162,7 @@ plot <- state |>
   ) |> 
   ggplot() +
   geom_polygon(aes(x=long, y=lat, group = group),
-               color = "black", fill = "#FCF2DA", linewidth = 0.5) +
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
   geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
   ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
                         label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
@@ -172,7 +174,7 @@ plot <- state |>
              family = "Puritan", size = 10,
              label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
              label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
-             fill = "#FCF2DA",
+             fill = "#F8EAD1",
              border.color = NA,
              data = new_centroids |> 
                filter(Abb == "MD.")) +
@@ -185,7 +187,18 @@ plot <- state |>
   scale_size_identity() +
   coord_map("azequidistant") + # to make the shape of the map look globular
   labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED", 
-       subtitle = "") +
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT') +
+  # Arrow for New Jersey
+  annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+           color = "black", linewidth = 0.15) +
+  # Arrow for Massachusetts 
+  annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+           color = "black", linewidth = 0.15) +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
@@ -194,18 +207,21 @@ plot <- state |>
         axis.ticks.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.subtitle = ggtext::element_markdown(size = 100),
-        panel.background = element_rect(colour = "black", fill =  "#FCF2DA")) +
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
   theme(legend.position = "bottom",
         legend.text = element_text(family = "Puritan", size = 12))
 
-ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_test.png"),
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "01_full_unmask.png"),
        plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
 
-img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_test.png")) |> 
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "01_full_unmask.png")) |> 
   grid::rasterGrob()
 
-plot_test <- ggplot() +
+plot_final <- ggplot() +
   annotation_custom(grob = img_main_grob,
                     xmin = 0,
                     ymin = 0) +
@@ -228,12 +244,953 @@ plot_test <- ggplot() +
   annotation_custom(grob = img5_grob,
                     xmin = 0.775,
                     xmax = 0.925,
-                    ymin = -0.4)
+                    ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
 
 
-ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "04_full_img.png"), 
-       plot = plot_test, width = 5732, height = 2700, units = "px", dpi = 300)
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "01_full_unmask.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
 
-#plot with state abbreviations
-plot2 <- plot + with(new_centroids, 
-                     annotate(geom = "text", x = long, y = lat, label = Abb, family = "Puritan"))
+# State Names ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  # ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+  #                       label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+  #                       label.color = NA,
+  #                       fill = NA,
+  #                       data=text_dat |>
+  #                         filter(display_step != 0)) + # Set 1 for red text reveal and 0 for all text
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT') +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "02_state_names.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "02_state_names.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  # annotation_custom(grob = img3_grob,
+  #                   xmin = 0.62,
+  #                   xmax = 0.72,
+  #                   ymin = -0.82) +
+  # annotation_custom(grob = img4_grob,
+  #                   xmin = 0.655,
+  #                   xmax = 0.755,
+  #                   ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "02_state_names.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Red Numbers ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(0,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT') +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "03_red_numbers.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "03_red_numbers.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  # annotation_custom(grob = img3_grob,
+  #                   xmin = 0.62,
+  #                   xmax = 0.72,
+  #                   ymin = -0.82) +
+  # annotation_custom(grob = img4_grob,
+  #                   xmin = 0.655,
+  #                   xmax = 0.755,
+  #                   ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "03_red_numbers.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Title ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(0,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+       ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "04_title.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "04_title.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  # annotation_custom(grob = img3_grob,
+  #                   xmin = 0.62,
+  #                   xmax = 0.72,
+  #                   ymin = -0.82) +
+  # annotation_custom(grob = img4_grob,
+  #                   xmin = 0.655,
+  #                   xmax = 0.755,
+  #                   ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "04_title.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Issued By Box ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(0,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+  ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "05_issue_box.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "05_issue_box.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  # annotation_custom(grob = img4_grob,
+  #                   xmin = 0.655,
+  #                   xmax = 0.755,
+  #                   ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "05_issue_box.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Black Numbers ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(1,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+  ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "06_black_numbers.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "06_black_numbers.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  # annotation_custom(grob = img4_grob,
+  #                   xmin = 0.655,
+  #                   xmax = 0.755,
+  #                   ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "06_black_numbers.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Illustration ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(1,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+  ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "07_illustration.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "07_illustration.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  annotation_custom(grob = img4_grob,
+                    xmin = 0.655,
+                    xmax = 0.755,
+                    ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "07_illustration.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Names ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(1,2,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+  ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "08_names.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "08_names.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  # annotation_custom(grob = img2_grob,
+  #                   xmin = 0.25,
+  #                   xmax = 0.65,
+  #                   ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  annotation_custom(grob = img4_grob,
+                    xmin = 0.655,
+                    xmax = 0.755,
+                    ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "08_names.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
+
+# Keys ----
+plot <- state |> 
+  mutate(
+    border_color = case_when(
+      # region == "arkansas" & between(order, 392, 442) ~ "red",
+      region == "texas" & between(order, 13030, 13056) ~ "red",
+      region == "oklahoma" & between(order, 10955, 10962) ~ "red",
+      region == "oklahoma" & between(order, 10680, 10708) ~ "red",
+      region == "ohio" & between(order, 10524, 10579) ~ "red",
+      region == "kentucky" & between(order, 4035, 4550) ~ "red",
+      region == "missouri" & between(order, 7950, 8046) ~ "red",
+      region == "tennessee" & between(order, 11915, 11950) ~ "red",
+      region == "west virginia" & between(order, 15033, 15141) ~ "red",
+      region == "pennsylvania" & between(order, 11322, 11341) ~ "red",
+      region == "maryland" & between(order, 5443, 5457) ~ "red",
+      region == "maryland" & between(order, 5468, 5478) ~ "red",
+      region == "delaware" & between(order, 1357, 1438) ~ "red",
+      TRUE ~ "black"
+    ),
+    border_width = case_when(
+      border_color == "red" ~ 2,
+      TRUE ~ 0.5
+    )
+  ) |> 
+  ggplot() +
+  geom_polygon(aes(x=long, y=lat, group = group),
+               color = "black", fill = "#F8EAD1", linewidth = 0.5) +
+  geom_path(aes(x=long, y=lat, group = group, color = border_color, linewidth = border_width)) +  
+  ggtext::geom_richtext(aes(x = x_adj, y = y, label = text, size = size, angle = angle),
+                        label.padding = grid::unit(rep(0, nrow(text_dat)), "pt"),
+                        label.color = NA,
+                        fill = NA,
+                        data=text_dat |>
+                          filter(display_step %in% c(1,2,3))) + 
+  geom_label(aes(x = long, y = lat, label = Abb, angle = angle),
+             family = "Puritan", size = 10,
+             label.padding = grid::unit(rep(0.01, nrow(new_centroids)), "pt"),
+             label.r = grid::unit(rep(0, nrow(new_centroids)), "pt"),
+             fill = "#F8EAD1",
+             border.color = NA,
+             data = new_centroids |> 
+               filter(Abb == "MD.")) +
+  geom_text(aes(x = long, y = lat, label = Abb, angle = angle),
+            family = "Puritan", size = 16,
+            data = new_centroids |> 
+              filter(Abb !="MD.")) +
+  scale_color_identity() +
+  scale_linewidth_identity() +
+  scale_size_identity() +
+  coord_map("azequidistant") + # to make the shape of the map look globular
+  labs(title = "THE RED RECORD OF LYNCHING - 1889 TO 1921 - GEOGRAPHICALLY DISTRIBUTED",
+       subtitle = "( 3424 IN 33 YEARS )",
+       caption = 'MOB VIOLENCE AND LYNCHING - THE ONLY "INDUSTRIES"THE
+       <span style="text-decoration: underline red;">SOUTH</span>
+       VOTES SOLIDLY TO PROTECT'
+  ) +
+  # # Arrow for New Jersey
+  # annotate("segment", x = -74, y = 40.14, xend = -72.5, yend = 40,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  # # Arrow for Massachusetts 
+  # annotate("segment", x = -71, y = 42.33, xend = -70, yend = 42.43,
+  #          arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+  #          color = "black", linewidth = 0.15) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = ggtext::element_markdown(size = 50, color = "red", hjust = 0.5),
+        plot.subtitle = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.caption = ggtext::element_markdown(size = 50, color = "#F8EAD1", hjust = 0.5),
+        plot.background = element_rect(colour = NA, fill =  "#F8EAD1"),
+        panel.background = element_rect(colour = "black", fill =  "#F8EAD1")) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(family = "Puritan", size = 12))
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "09_keys.png"),
+       plot = plot, width = 5732, height = 2700, units = "px", dpi = 300)
+
+img_main_grob <- png::readPNG(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "image-elements", "09_keys.png")) |> 
+  grid::rasterGrob()
+
+plot_final <- ggplot() +
+  annotation_custom(grob = img_main_grob,
+                    xmin = 0,
+                    ymin = 0) +
+  # annotation_custom(grob = img1_grob,
+  #                   xmin = 0.1,
+  #                   xmax = 0.45,
+  #                   ymin = -0.6) +
+  annotation_custom(grob = img2_grob,
+                    xmin = 0.25,
+                    xmax = 0.65,
+                    ymin = 0.75) +
+  annotation_custom(grob = img3_grob,
+                    xmin = 0.62,
+                    xmax = 0.72,
+                    ymin = -0.82) +
+  annotation_custom(grob = img4_grob,
+                    xmin = 0.655,
+                    xmax = 0.755,
+                    ymin = 0.45) +
+  # annotation_custom(grob = img5_grob,
+  #                   xmin = 0.775,
+  #                   xmax = 0.925,
+  #                   ymin = -0.4) +
+  theme(
+    panel.background = element_rect(colour = NA, fill =  "#F8EAD1")
+  )
+
+
+ggsave(here::here("Slow Reveal Recreations", "anti-lynching-bill-map", "recreated-imgs", "09_keys.png"), 
+       plot = plot_final, width = 5732, height = 2700, units = "px", dpi = 300)
