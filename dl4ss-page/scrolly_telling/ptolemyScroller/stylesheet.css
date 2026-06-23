@@ -151,7 +151,7 @@ figure p.is-current {
     color: #ffffff;
     background-color: rgba(95, 68, 68, 0);
     opacity: 0;
-    outline: 10px solid red;
+    outline: 0px solid red;
 }
 
 .step {
@@ -163,7 +163,7 @@ figure p.is-current {
     /* display: flex;
     justify-content: center;
     align-items: center; */
-    outline: 10px solid red;
+    outline: 0px solid red;
     z-index: 0;
 }
 
