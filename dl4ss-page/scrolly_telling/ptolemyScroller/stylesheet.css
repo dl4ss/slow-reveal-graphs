@@ -153,6 +153,7 @@ figure p.is-current {
     opacity: 0;
     /* Adjust outline for debug help */
     /* outline: 10px solid red; */
+
 }
 
 .step {
