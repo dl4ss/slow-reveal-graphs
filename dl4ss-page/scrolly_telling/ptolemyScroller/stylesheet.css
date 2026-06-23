@@ -151,7 +151,8 @@ figure p.is-current {
     color: #ffffff;
     background-color: rgba(95, 68, 68, 0);
     opacity: 0;
-    outline: 10px solid red;
+    /* Adjust outline for debug help */
+    /* outline: 10px solid red; */
 }
 
 .step {
@@ -163,7 +164,8 @@ figure p.is-current {
     /* display: flex;
     justify-content: center;
     align-items: center; */
-    outline: 10px solid red;
+    /* Adjust outline for debug help */
+    /* outline: 10px solid red; */
     z-index: 0;
 }
 
