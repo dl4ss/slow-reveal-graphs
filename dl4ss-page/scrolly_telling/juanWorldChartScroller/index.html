@@ -15,9 +15,19 @@
 <body>
 
     <main>
-        <!-- Currently unused -->
         <section id="background">
+            <h1>Juan de la Cosa's World Chart</h1>
+            <h2>A Virtual Tour</h2>
 
+            <p>
+                This is a story is a story about Juan de la Cosa's 1500 World Chart, which was one of the first
+                European world maps to show North and South America across the Atlantic Ocean. As you scroll, the
+                story will progress on the left side of your screen. On the right side, you'll see images that
+                correspond with the story. Pay attention to the outlines that appear on the map. When you need more
+                time to read or look at something, simply stop scrolling. Sometimes you'll be invited to click on a
+                hyperlink, which will open a new window on your computer. We hope you'll enjoy our scrollytelling
+                about Juan de la Cosa's world map!
+            </p>
         </section>
         <section id="scrolly">
 
@@ -28,34 +38,23 @@
                 The center-step tag is used by the JavaScript in the file to adjust the opacity 
                 of the step.
                  -->
-                <p id="contentScroll" center-step="1"><b>Juan de la Cosa's World Chart</b><br>A Virtual Tour</p>
 
-                <p id="contentScroll" center-step="2">
-                    This is a story is a story about Juan de la Cosa's 1500 World Chart, which was one of the first
-                    European world maps to show North and South America across the Atlantic Ocean. As you scroll, the
-                    story will progress on the left side of your screen. On the right side, you'll see images that
-                    correspond with the story. Pay attention to the outlines that appear on the map. When you need more
-                    time to read or look at something, simply stop scrolling. Sometimes you'll be invited to click on a
-                    hyperlink, which will open a new window on your computer. We hope you'll enjoy our scrollytelling
-                    about Juan de la Cosa's world map!
-                </p>
-
-                <p id="contentScroll" center-step="3" class="left-location">
+                <p id="contentScroll" center-step="1" class="left-location">
                     Juan de la Cosa was a Spanish pilot and navigator who sailed to the Americas seven times, including
                     on the first three of Christopher Columbus's famous voyages.
 
                 </p>
-                <img id="contentScroll" center-step="3" class="right-location"
+                <img id="contentScroll" center-step="1" class="right-location"
                     src="https://static.wixstatic.com/media/5875bf_987e71e0d5324e428f1b5a449fad8c8b~mv2.webp">
 
-                <p id="contentScroll" center-step="4" class="left-location">
+                <p id="contentScroll" center-step="2" class="left-location">
                     In fact, de la Cosa was the owner of the <i>Santa Maria</i>, one of the three ships that sailed with
                     Columbus in 1492.
                 </p>
-                <img id="contentScroll" center-step="4" class="right-location"
+                <img id="contentScroll" center-step="2" class="right-location"
                     src="https://static.wixstatic.com/media/5875bf_90a50f2215fb435bb5cf165d2b7d291d~mv2.png">
 
-                <p id="contentScroll" center-step="5">
+                <p id="contentScroll" center-step="3">
                     De la Cosa most likely created his world map in 1500 for the Spanish crown, to highlight their newly
                     discovered territories in the western hemisphere. This context is important, as is what de la Cosa
                     knew, and what he didn't know. Like all maps, this map tells a story.
@@ -66,30 +65,30 @@
                     When you're ready, keep scrolling to learn more.
                 </p>
 
-                <img id="contentScroll" center-step="6"
+                <img id="contentScroll" center-step="3"
                     src="https://static.wixstatic.com/media/5875bf_129683ba51c74d1bb2eb1629a58b7f35~mv2.webp">
 
-                <p id="contentScroll" center-step="7" class="left-location">
+                <p id="contentScroll" center-step="4" class="left-location">
                     The first thing to know about De la Cosa's map, is that he actually drew it with west facing upward,
                     as is shown by the compass rose he drew in the middle of the map
 
                 </p>
-                <img id="contentScroll" center-step="7" class="right-location vertical-map" persistent="TRUE"
+                <img id="contentScroll" center-step="4" class="right-location vertical-map" persistent="TRUE"
                     src="https://static.wixstatic.com/media/5875bf_129683ba51c74d1bb2eb1629a58b7f35~mv2.webp">
 
-                <p id="contentScroll" center-step="8" class="left-location">
+                <p id="contentScroll" center-step="5" class="left-location">
                     One way we know that this is the orientation he intended is by the image of the person at the top of
                     the map.
                 </p>
 
-                <p id="contentScroll" center-step="9" class="left-location">
+                <p id="contentScroll" center-step="6" class="left-location">
                     If you look closely, you can see it's a drawing of St. Christopher carrying the infant Jesus across
                     a river. This was clearly an homage to Christopher Columbus, as well as a reference to the religious
                     motivations behind the Spanish Crown's sponsorship of westward exploration.
 
 
                 </p>
-                <img id="contentScroll" center-step="9" class="right-location"
+                <img id="contentScroll" center-step="6" class="right-location"
                     src="https://static.wixstatic.com/media/5875bf_494e4d68f6494bce85e965597fd58914~mv2.png">
 
             </figure>
@@ -257,21 +256,21 @@
             currentElement.style("opacity", opacity);
 
 
-            // This is specific to this scrolly teller and works to keep the image in step 7 
+            // This is specific to this scrolly teller and works to keep the image in step 4
             // persistent while other text changes.
-            if (response.index === 7 && response.progress <= 0.33) {
+            if (response.index === 4 && response.progress <= 0.33) {
                 // Fade in: from 0 to 1 over the first 33%
                 opacity = (response.progress) * 3;
 
                 persistentMap.style("opacity", opacity);
 
-            } else if (response.index === 8 && response.progress >= 0.66) {
+            } else if (response.index === 5 && response.progress >= 0.66) {
 
                 opacity = 3 - response.progress * 3;
 
                 persistentMap.style("opacity", opacity);
 
-            } else if (response.index >= 7 && response.index <= 8) {
+            } else if (response.index >= 4 && response.index <= 5) {
 
                 persistentMap.style("opacity", 1);
 
@@ -280,7 +279,7 @@
                 persistentMap.style("opacity", 0);
             }
 
-            if (response.index === 7 && response.progress > 0 && response.progress < 1) {
+            if (response.index === 4 && response.progress > 0 && response.progress < 1) {
                 d3.select(".mapContainer")
                     .classed("transition", true);
             } else {
